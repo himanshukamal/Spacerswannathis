@@ -1,340 +1,157 @@
 import Image from "next/image";
-import React, { useEffect } from "react";
+import React, { useEffect, useState, ReactDOM } from "react";
 import effects from "../components/effects";
 
-export default function Home() {
-  //   useEffect(() => {
-  //     const cursorRounded = document.querySelector(".mousehover");
-  //     const moveCursor = (e) => {
-  //       const mouseY = e.clientY;
-  //       const mouseX = e.clientX;
+export default function Comp({ name }) {
+  const [childs, setChilds] = useState([]);
+  const [val, setVal] = useState("");
+  useEffect(() => {
+    // Make the DIV element draggable:
+    dragElement(document.getElementById("mydiv"));
+    function dragElement(elmnt) {
+      var pos1 = 0,
+        pos2 = 0,
+        pos3 = 0,
+        pos4 = 0;
+      if (document.getElementById(elmnt.id + "header")) {
+        /* if present, the header is where you move the DIV from:*/
+        document.getElementById(elmnt.id + "header").onmousedown =
+          dragMouseDown;
+      } else {
+        /* otherwise, move the DIV from anywhere inside the DIV:*/
+        elmnt.onmousedown = dragMouseDown;
+      }
 
-  //       cursorRounded.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
-  //     };
+      function dragMouseDown(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // get the mouse cursor position at startup:
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        document.onmouseup = closeDragElement;
+        // call a function whenever the cursor moves:
+        document.onmousemove = elementDrag;
+      }
 
-  //     window.addEventListener("mousemove", moveCursor);
-  //   }, []);
+      function elementDrag(e) {
+        e = e || window.event;
+        e.preventDefault();
+        // calculate the new cursor position:
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+        // set the element's new position:
+        elmnt.style.top = elmnt.offsetTop - pos2 + "px";
+        elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
+      }
+
+      function closeDragElement() {
+        /* stop moving when mouse button is released:*/
+        document.onmouseup = null;
+        document.onmousemove = null;
+      }
+    }
+  }, []);
+
+  const [demo, setDemo] = useState([]);
+  const [showChild, setShowChild] = useState(false);
+
+  const addInput = (e) => {
+    var randomNum = Math.floor(Math.random() * 10);
+
+    // demo.push(randomNum);
+    console.log("e", e);
+    console.log("demo", demo);
+    setDemo(randomNum);
+    setShowChild(true);
+  };
+  const handleCancelInput = () => {
+    setShowChild(false);
+  };
+  const handleCancel = () => {};
+  // return (
+  //   <>
+  //     <div className=" absolute" id="mydiv">
+  //       <div
+  //         className="mydivheader flex justify-space w-[300px]"
+  //         draggable="true"
+  //         draggable-auto="true"
+  //         id="mydivheader"
+  //       >
+  //         <p className="text-[grey] text-[25px] ">categories</p>
+  //         <button
+  //           onClick={addInput}
+  //           className="ml-2 text-[20px] bg-[grey] px-4 py-2 rounded-full"
+  //         >
+  //           add
+  //         </button>
+  //         <button
+  //           className="bg-yellow-400 rounded-full py-2 px-4"
+  //           onClick={handleCancelInput}
+  //         >
+  //           cancel
+  //         </button>
+
+  //       </div>
+  //       {showChild ? (
+  //           <div className="text-[black]  px-10 py-5 mydivheader">
+  //             {/* {demo} */}
+  //             <input
+  //               type="text"
+  //               className="py-2 px-2 focus:outline-none"
+  //               placeholder="enter category"
+  //             ></input>
+  //             <button
+  //               onClick={addInput}
+  //               className="ml-2 text-[20px] bg-[green] px-4 py-2 rounded-full"
+  //             >
+  //               add
+  //             </button>
+  //             <button
+  //               className="rounded-full text-[20px] bg-[lightblue] px-4 py-2"
+  //               onClick={handleCancel}
+  //             >
+  //               cancel
+  //             </button>
+  //           </div>
+  //         ) : null}
+  //     </div>
+  //   </>
+  // );
 
   return (
-    <div className="mousepointer h-[100vh] font-sans">
-      <header className="h-[100px] pl-[4vw] pr-[4vw] flex items-center justify-between">
-        <div className="logowrapper flex">
-          <p className="text-[white] mt-[4px] text-[21px] font-black uppercase">
-            spacers
-          </p>
-          <p className="text-[white] mt-[3px] mr-[6px] ml-[6px] text-[12px] leading-8">
-            by
-          </p>
-          <div>
-            <img
-              src={
-                "https://d2pas86kykpvmq.cloudfront.net/img_spacers/ic_logo.svg"
-              }
-              alt="company_logo"
-            />
-          </div>
-        </div>
-        <a className="pt-[12px] pr-[24px] pb-[10px] pl-[24px] border border-white rounded-3xl">
-          <p className="text-[white] text-[12px] leading-4 font-black uppercase  ">
-            Download
-          </p>
-        </a>
-      </header>
-      <div className="text-center mt-[50px] relative">
-        <p className="text-[white] text-[17px] font-semibold uppercase">
-          Big 3d set with cosmic illustration
-        </p>
-        <p className="text-[white] text-[140px] md:text-[220px] mt-[1rem] md:mt-[2rem] font-black uppercase leading-[150px]">
-          Spacers
-        </p>
-        <div className="fixed top-[30vh] left-[49vw]">
-          <img
-            className=""
-            src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/star-1.svg"
-          />
-        </div>
-      </div>
-
-      <div className="hero-image flex justify-center relative">
-        <img
-          className="absolute top-[-4rem] w-[65vw] max-w-[650px] animate-bounceless "
-          src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/img-hero.png"
+    <>
+      <div></div>
+      <div className="flex " id="mydiv">
+        <p>{name}</p>
+        <input
+          placeholder="enter value"
+          value={val}
+          style={{ width: "4rem", marginLeft: "1rem" }}
+          onChange={(e) => {
+            setVal(e.target.value);
+          }}
         />
+        <button
+          onClick={(event) => {
+            console.log("button add is clicked");
+            setChilds([...childs, val]);
+            setVal("");
+          }}
+        >
+          Add
+        </button>
       </div>
-      {/*<div className="cursor mousehover rounded-full"></div> */}
-
-      <div className="relative mt-[26em] section-2 pt-[140px] pb-[140px] pl-[4vw] pr-[4vw]">
-        <p className=" text-[white] text-center uppercase text-[48px] font-black mb-[20px] leading-[56px]">
-          3 characters
-        </p>
-        <p className=" text-[white] text-center uppercase">
-          We have created 3 different characters. Choose
-        </p>
-        <p className="text-[white] text-center uppercase">
-          that you like most for your design project.
-        </p>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        {childs.map((child, i) => {
+          return <Comp key={i} name={child} />;
+        })}
       </div>
-
-      {/*} 3 videos*/}
-      <div className="capsules ml-[12vw] flex justify-between max-w-[1080px]">
-        <div className="capsule_wrapper w-[32%]">
-          <div className="capsule">
-            <video
-              muted="muted"
-              onMouseOver={(event) => event.target.play()}
-              poster="https://d2pas86kykpvmq.cloudfront.net/img_spacers/alien.png"
-              className="rounded-full"
-            >
-              <source
-                type="video/webm"
-                src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/videos/alien.webm"
-              />
-              <source
-                type="video/mp4"
-                src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/videos/alien.mp4"
-              />
-            </video>
-          </div>
-        </div>
-        <div className="capsule_wrapper w-[32%]">
-          <div className="capsule">
-            <video
-              muted="muted"
-              className="rounded-full"
-              onMouseOver={(event) => event.target.play()}
-              poster="https://d2pas86kykpvmq.cloudfront.net/img_spacers/astro.png"
-            >
-              <source
-                type="video/webm"
-                src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/videos/astro.webm"
-              />
-              <source
-                type="video/mp4"
-                src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/videos/astro.mp4"
-              />
-            </video>
-          </div>
-        </div>
-        <div className="capsule_wrapper w-[32%]">
-          <div className="capsule">
-            <video
-              muted="muted"
-              className="rounded-full"
-              onMouseOver={(event) => event.target.play()}
-              poster="https://d2pas86kykpvmq.cloudfront.net/img_spacers/cyclo.png"
-            >
-              <source
-                type="video/webm"
-                src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/videos/cyclo.webm"
-              />
-              <source
-                type="video/mp4"
-                src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/videos/cyclo.mp4"
-              />
-            </video>
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-[60px] text-[white] text-center text-[220px]  uppercase font-black leading-[100%]">
-        <p>ultra high</p>
-        <p>quality</p>
-        <p>renders</p>
-        {/*<img
-          className="relative text-center max-w-[800px] w-[80vw] bg-transparent pt-[100px]"
-          src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/skater.png"
-        />*/}
-        <div className="relative flex  flex-col ">
-          <img
-            src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/skater.png"
-            loading="lazy"
-            sizes="(max-width: 991px) 100vw, (max-width: 1919px) 80vw, 1400px"
-            srcSet="https://d2pas86kykpvmq.cloudfront.net/img_spacers/skater-p-500.png 500w, https://d2pas86kykpvmq.cloudfront.net/img_spacers/skater-p-800.png 800w, https://d2pas86kykpvmq.cloudfront.net/img_spacers/skater.png 1851w"
-            alt=""
-            className="skater"
-          ></img>
-          <img
-            src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/skater-btm.png"
-            loading="eager"
-            sizes="(max-width: 991px) 100vw, (max-width: 1919px) 80vw, 1400px"
-            srcSet="https://d2pas86kykpvmq.cloudfront.net/img_spacers/skater-btm-p-500.png 500w, https://d2pas86kykpvmq.cloudfront.net/img_spacers/skater-btm-p-800.png 800w, https://d2pas86kykpvmq.cloudfront.net/img_spacers/skater-btm.png 1851w"
-            alt=""
-            className="skater-mask"
-          />
-        </div>
-      </div>
-      {/* horizontal scroll*/}
-      <div>
-        <div className="flex flex-row h-[50%] mt-[100px] mb-[280px]">
-          <div className="title ml-[10vw] pt-[6em] pr-[5em]">
-            <h1 className="text-[white] text-[48px] font-black">12</h1>
-            <h1 className="text-[white] text-[48px] font-black uppercase">
-              different
-            </h1>
-            <h1 className="text-[white] text-[48px] font-black uppercase">
-              poses
-            </h1>
-            <p className="text-[white]">big variety of funny poses</p>
-          </div>
-
-          <div className="scroll-container flex flex-row px-8 py-8 overflow-scroll">
-            <img
-              className="bg-[#241EA9] hover:bg-[#501ED8] rounded-[2em]  h-[36em] mr-[2vw] pt-[9em] pb-[8em] pl-[2em] pr-[2em] "
-              src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/preview-9.png"
-            />
-            <img
-              className="bg-[#241EA9] hover:bg-[#501ED8] rounded-[2em]  h-[36em] mr-[2vw] pt-[9em] pb-[8em] pl-[2em] pr-[2em] mr-[2vw]"
-              src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/preview-10.png"
-            />
-            <img
-              className="bg-[#241EA9] hover:bg-[#501ED8] rounded-[2em]  h-[36em] mr-[2vw] pt-[9em] pb-[8em] pl-[2em] pr-[2em]"
-              src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/preview-13.png"
-            />
-            <img
-              className="bg-[#241EA9] hover:bg-[#501ED8] rounded-[2em]  h-[36em] mr-[2vw] pt-[9em] pb-[8em] pl-[2em] pr-[2em]"
-              src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/preview-11.png"
-            />
-            <img
-              className="bg-[#241EA9] hover:bg-[#501ED8] rounded-[2em]  h-[36em] mr-[2vw] pt-[9em] pb-[8em] pl-[2em] pr-[2em]"
-              src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/preview-8.png"
-            />
-            <img
-              className="bg-[#241EA9] hover:bg-[#501ED8] rounded-[2em]  h-[36em] mr-[2vw] pt-[9em] pb-[8em] pl-[2em] pr-[2em]"
-              src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/preview-5.png"
-            />
-            <img
-              className="bg-[#241EA9] hover:bg-[#501ED8] rounded-[2em]  h-[36em] mr-[2vw] pt-[9em] pb-[8em] pl-[2em] pr-[2em]"
-              src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/preview-12.png"
-            />
-            <img
-              className="bg-[#241EA9] hover:bg-[#501ED8] rounded-[2em]  h-[36em] mr-[2vw] pt-[9em] pb-[8em] pl-[2em] pr-[2em]"
-              src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/preview-7.png"
-            />
-            <img
-              className="bg-[#241EA9] hover:bg-[#501ED8] rounded-[2em]  h-[36em] mr-[2vw] pt-[9em] pb-[8em] pl-[2em] pr-[2em]"
-              src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/preview-6.png"
-            />
-            <img
-              className="bg-[#241EA9] hover:bg-[#501ED8] rounded-[2em]  h-[36em] mr-[2vw] pt-[9em] pb-[8em] pl-[2em] pr-[2em]"
-              src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/preview-6.png"
-            />
-            <img
-              className="bg-[#241EA9] hover:bg-[#501ED8] rounded-[2em]  h-[36em] mr-[2vw] pt-[9em] pb-[8em] pl-[2em] pr-[2em]"
-              src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/preview-14.png"
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="text">
-        <div className=" text-[100px] font-black text-center uppercase leading-[1em]">
-          <p className="text-[white]">made specially</p>
-          <p className="text-[white]">for digital</p>
-          <p className="text-[white]">designers.</p>
-        </div>
-        <div className="image_wrapper flex justify-around pb-[180px]">
-          <img
-            className="max-w-[610px] animate-bounceless"
-            src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/spacer-alien.png"
-          />
-          <img
-            className="max-w-[610px] animate-bounceless"
-            src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/spacer-astro.png"
-          />
-        </div>
-      </div>
-
-      <div className="text pt-[140px] pb-[180px]">
-        <div className="flex justify-evenly">
-          <div className="flex flex-col">
-            <img
-              className="max-w-[390px]"
-              src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/phone-2.png"
-            />
-            <img
-              className="max-w-[390px] mt-[200px]"
-              src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/phone-3.png"
-            />
-            <img
-              className="max-w-[390px] mt-[200px]"
-              src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/phone-1.png"
-            />
-          </div>
-          <div className="text-[white] uppercase  mt-[200px]">
-            <div className="sticky top-32">
-              <p className=" text-[17px] font-medium  ">Where to use?</p>
-              <div className="leading-[58px]">
-                <p className="text-[48px] font-black mt-[41px]">vivid 3d</p>
-                <p className="text-[48px] font-black">illustration</p>
-                <p className="text-[48px] font-black">are perfect for </p>
-                <p className="text-[48px] font-black">apps, landing</p>
-                <p className="text-[48px] font-black">or ads</p>
-                <p className="text-[48px] font-black">campaigns</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="text-center flex justify-center pt-[9em]">
-          <img
-            className=" w-[72%] max-w-[1000px]"
-            src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/Desktop.png"
-          />
-        </div>
-      </div>
-
-      {/* moving earth*/}
-      <div className="bg-[#1d1630] pt-[200px]">
-        <div className="text-center text-[white]">
-          <p className="text-[48px] font-black uppercase leading-[35px]">
-            use details to
-          </p>
-          <p className="text-[48px] font-black uppercase">make it pop</p>
-          <div className="text-center text-[white] text-[20px] leading-[120%]">
-            <p>as they say devil is in the detail along with</p>
-            <p>characters we prepared small objects to make your</p>
-            <p>product looking more professional</p>
-          </div>
-        </div>
-        <div className="flex">
-          <div className="flex-col">
-            <img
-              className="w-[22vw] animate-rotateanim"
-              src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/preview-39.png"
-            />
-            <img
-              className="w-[22vw] animate-bounceless"
-              src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/preview-15.png"
-            />
-          </div>
-          <video
-            muted="muted"
-            loop="loop"
-            autoPlay="autoplay"
-            alt="spinning planet illustration"
-            poster="https://d2pas86kykpvmq.cloudfront.net/img_spacers/planet-prev.png"
-            className="image-15 w-[60vw]"
-          >
-            <source
-              type="video/webm"
-              src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/videos/planet.webm"
-            />
-            <source
-              type="video/mp4"
-              src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/videos/planet.mp4"
-            />
-          </video>
-          <div className="flex-col">
-            <img
-              className="w-[16vw] bg-[#1A152F]"
-              src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/preview-4_1.png"
-            />
-            <img
-              className="w-[18vw] animate-rotateanim"
-              src="https://d2pas86kykpvmq.cloudfront.net/img_spacers/preview-36.png"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+    </>
   );
+}
+
+function App() {
+  return <Comp name="Categories" />;
 }
